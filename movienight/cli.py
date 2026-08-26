@@ -1,4 +1,5 @@
-"""movienight CLI (SCOPING §3): import | sync | enrich | score | build | all.
+"""movienight CLI (SCOPING §3):
+pull | import | sync | enrich | score | build | publish | all.
 
 Run from the project root (where config.toml lives). Phase 1 is on-demand:
 `movienight all` chains everything and site/index.html is the product."""
@@ -27,6 +28,10 @@ def main(argv: list[str] | None = None) -> None:
     )
     sub = parser.add_subparsers(dest="cmd", required=True)
 
+    sub.add_parser(
+        "pull",
+        help="download export zips uploaded through the app (Supabase) and import them",
+    )
     p_import = sub.add_parser("import", help="import Letterboxd export zips")
     p_import.add_argument(
         "zips", nargs="*", type=Path,
@@ -43,18 +48,34 @@ def main(argv: list[str] | None = None) -> None:
         help="run the temporal-holdout evaluation instead of writing scores",
     )
     sub.add_parser("build", help="emit site/index.html + data.js")
-    sub.add_parser("all", help="import → sync → enrich → score → build")
+    sub.add_parser(
+        "publish", help="upload site/data.json to Supabase for the app"
+    )
+    sub.add_parser("all", help="pull → import → sync → enrich → score → build → publish")
 
     args = parser.parse_args(argv)
     cfg = config_mod.load(args.root)
+
+    # App signups become members for every command, so a new friend who
+    # onboarded in the app flows through sync/score/build with no config edit.
+    # Offline runs degrade to config.toml members instead of failing.
+    from .ingest import pull
+
+    try:
+        pull.sync_profile_members(cfg)
+    except Exception as e:  # noqa: BLE001 - any network/API failure is non-fatal
+        print(f"members: profile sync failed ({e}) — using config.toml only")
+
     conn = db.connect(cfg.db_path)
     for m in cfg.members:
-        db.upsert_member(conn, m.username)
+        db.upsert_member(conn, m.username, m.name)
     conn.commit()
 
     t0 = time.monotonic()
     try:
-        if args.cmd == "import":
+        if args.cmd == "pull":
+            pull.run(conn, cfg)
+        elif args.cmd == "import":
             from .ingest import importer
 
             zips = args.zips or sorted(cfg.exports_dir.glob("*.zip"))
@@ -80,17 +101,23 @@ def main(argv: list[str] | None = None) -> None:
             from .build import builder
 
             builder.run(conn, cfg)
+        elif args.cmd == "publish":
+            from . import publish
+
+            publish.run(cfg)
         elif args.cmd == "all":
-            from . import enrich
+            from . import enrich, publish
             from .build import builder
             from .ingest import importer, rss
             from .model import score
 
+            pull.run(conn, cfg)
             importer.run(conn, cfg, sorted(cfg.exports_dir.glob("*.zip")))
             rss.run(conn, cfg)
             enrich.run(conn, cfg)
             score.run(conn, cfg)
             builder.run(conn, cfg)
+            publish.run(cfg)
     finally:
         conn.close()
     print(f"{args.cmd}: done in {time.monotonic() - t0:.1f}s")

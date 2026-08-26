@@ -6,6 +6,24 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8324", "-d", "site"],
       "port": 8324
+    },
+    {
+      "name": "app",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd app && node ./scripts/sync-data.mjs && bunx expo start --web --port 8082"],
+      "port": 8082
+    },
+    {
+      "name": "app-8091",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd app && node ./scripts/sync-data.mjs && bunx expo start --web --port 8091"],
+      "port": 8091
+    },
+    {
+      "name": "app-open",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd app && node ./scripts/sync-data.mjs && EXPO_PUBLIC_SUPABASE_URL='' EXPO_PUBLIC_SUPABASE_KEY='' bunx expo start --web --port 8093"],
+      "port": 8093
     }
   ]
 }

@@ -1,0 +1,67 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+}
+
+/* ── movienight tokens ──────────────────────────────────────────────────────
+   One definition per token, resolved per color scheme with light-dark().
+   Dark is the primary design ("house lights down"); light is the matinee.
+   Components never use raw hex — only the semantic names registered below. */
+:root {
+  --mn-bg: light-dark(#f7f2e9, #16120d);
+  --mn-surface: light-dark(#fffdf8, #201a13);
+  --mn-surface-2: light-dark(#efe7d8, #2a2219);
+  --mn-line: light-dark(#ddd2be, #382e22);
+  --mn-ink: light-dark(#2b231a, #f2ead9);
+  --mn-muted: light-dark(#776853, #a3947d);
+  --mn-faint: light-dark(#a59882, #6e6250);
+  --mn-lamp: light-dark(#a06712, #e5a83c);
+  --mn-lamp-deep: light-dark(#7c4f0a, #b77f22);
+  --mn-on-lamp: light-dark(#fffdf8, #16120d);
+  --mn-wild: light-dark(#6a5baa, #a89bd4);
+  --mn-good: light-dark(#4f7f42, #8fbf7f);
+  --mn-bad: light-dark(#a84b39, #c9705f);
+  --mn-veil: light-dark(rgb(43 35 26 / 0.55), rgb(0 0 0 / 0.6));
+}
+
+@layer theme {
+  @theme {
+    --color-bg: var(--mn-bg);
+    --color-surface: var(--mn-surface);
+    --color-surface-2: var(--mn-surface-2);
+    --color-line: var(--mn-line);
+    --color-ink: var(--mn-ink);
+    --color-muted: var(--mn-muted);
+    --color-faint: var(--mn-faint);
+    --color-lamp: var(--mn-lamp);
+    --color-lamp-deep: var(--mn-lamp-deep);
+    --color-on-lamp: var(--mn-on-lamp);
+    --color-wild: var(--mn-wild);
+    --color-good: var(--mn-good);
+    --color-bad: var(--mn-bad);
+    --color-veil: var(--mn-veil);
+
+    /* Billing-block display face, loaded via expo-font in the root layout. */
+    --font-display: BebasNeue_400Regular, "Arial Narrow", sans-serif;
+  }
+}
+
+/* Platform font stacks for body text. */
+@media ios {
+  :root {
+    --font-sans: system-ui;
+    --font-mono: ui-monospace;
+  }
+}
+
+@media android {
+  :root {
+    --font-sans: normal;
+    --font-mono: monospace;
+  }
+}

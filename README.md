@@ -23,6 +23,8 @@ open site/index.html          # the product
 
 | Command | What it does |
 |---|---|
+| `movienight pull` | Download export zips members uploaded through the app (Supabase bucket) into `data/exports/` and import them. Skips itself when `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` are unset. |
+| `movienight publish` | Upload `site/data.json` to the Supabase `site-data` bucket, where the app reads it at runtime — data refreshes never need an app redeploy. Same skip rule as `pull`. |
 | `movienight import` | Parse `data/exports/*.zip` (Letterboxd account exports). Idempotent upserts; re-import a fresh zip any time. |
 | `movienight sync` | Poll each member's public RSS feed (≈50 recent diary entries, arrives with TMDB ids). One polite request per member. |
 | `movienight enrich` | Resolve films → TMDB ids (search + `overrides.yaml`), fetch metadata/providers (one cached call per film ever), build the discover candidate pool, write `data/resolution_report.md`. |
@@ -32,14 +34,24 @@ open site/index.html          # the product
 ## Member onboarding (one-time, ~2 min each)
 
 1. Letterboxd → Settings → Data → **Export your data**.
-2. Send the zip to Zach; it lands in `data/exports/` (don't rename — the
-   `letterboxd-<user>-…` filename identifies whose it is).
+2. Hand over the zip, either way:
+   - **In the app** (preferred): sign in, and onboarding walks you through
+     uploading the zip. It's parsed on your device for a summary, stored in
+     the group's private Supabase bucket, and `movienight pull` (part of
+     `movienight all`) imports it on the next pipeline run.
+   - **Old school**: send the zip to Zach; it lands in `data/exports/`
+     (don't rename — the `letterboxd-<user>-…` filename identifies whose it
+     is).
 3. That's the whole backfill. RSS keeps it current daily from then on;
    re-export a fresh zip a couple times a year to catch anything RSS missed
    (watchlist changes, rate-without-diary edits).
 
-Members live in `config.toml`. Watch-region and pre-checked streaming
-services live there too.
+Membership is self-serve: every command merges onboarded app profiles into
+the roster, so signing up in the app is the whole onboarding — nobody edits
+config for a new member. `config.toml`'s `[[members]]` entries remain as
+seeds/overrides (and the offline fallback). Watch-region and pre-checked
+streaming services live there too. Zips that resolve to a username with no
+profile and no config entry are marked rejected.
 
 ## Files that are yours to edit
 
@@ -74,7 +86,22 @@ The site footer credits TMDB (metadata/posters) and JustWatch-via-TMDB
 Nightly GitHub Actions cron, weekly provider refresh, MovieLens ml-32m
 item-item CF (support-gated), drift detection, eval in CI.
 
-## Deploy (when wanted)
+## Running unattended
 
-The site is static. Per SCOPING: `wrangler pages deploy site/` (Cloudflare
-Pages, unlisted URL). Any static host works identically.
+A LaunchAgent (`~/Library/LaunchAgents/com.movienight.pipeline.plist`) runs
+`movienight all` daily at 6:30 AM (missed runs fire on wake), logging to
+`data/pipeline.log`. That's the whole loop: members upload zips in the app →
+`pull` imports them → `publish` puts fresh scores where the app reads them.
+Remove with `launchctl bootout gui/$(id -u)/com.movienight.pipeline`.
+Phase 2 moves this to a GitHub Actions cron (needs a home for `data/movies.db`
+state first — see SCOPING §8).
+
+## Deploy
+
+**The app (web)**: `cd app && bun run deploy:web` — static Expo export staged
+by `scripts/prepare-deploy.mjs`, deployed to Vercel (`movienight` project,
+https://movienight-zeta.vercel.app). Redeploy only for code changes; data
+refreshes flow through `movienight publish`.
+
+**The legacy static site** in `site/` still works from any static host
+(`wrangler pages deploy site/` per SCOPING) but the app is the product now.
