@@ -1,0 +1,29 @@
+# movienight configuration. Members' Letterboxd profiles must be public.
+
+region = "US"
+
+# Contact for the polite User-Agent sent with RSS polls (SCOPING §4e).
+contact = "zmshort@wm.edu"
+
+# Streaming services to pre-check in the site's filter. Empty = no filter
+# preselected; the page builds its filter list from whatever providers appear
+# in the data. Names must match TMDB/JustWatch names, e.g.:
+# services = ["Netflix", "Max", "Hulu", "Criterion Channel"]
+services = []
+
+[pool]
+# Candidate-pool discovery caps (SCOPING §7c): ~12 seed queries, capped total.
+max_films = 2500
+vote_floor = 200
+
+[[members]]
+username = "zachshort"
+name = "Zach"
+
+[[members]]
+username = "cgra3538"
+name = "Colin"
+
+[[members]]
+username = "gabe"
+name = "Gabe"

@@ -1,0 +1,15 @@
+# secrets
+.env
+
+# private data: friends' exports, the database, generated reports
+data/
+
+# generated site (rebuilt by `movienight build`; deployed via wrangler, not git)
+site/
+
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/

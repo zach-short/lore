@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>movienight</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍿</text></svg>">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <h1>movie<span>night</span></h1>
+    <div class="sub">generated {{ generated_at }} · {{ n_films }} films · {{ region }}</div>
+  </div>
+  <div class="who">
+    <div class="who-label">tonight:</div>
+    <div id="members" class="member-chips"></div>
+  </div>
+</header>
+
+<nav class="modes" id="modes">
+  <button data-mode="blind" class="mode active">Blind spot</button>
+  <button data-mode="evangelist" class="mode">Evangelist</button>
+  <button data-mode="rewatch" class="mode">Rewatch</button>
+  <div class="mode-spacer"></div>
+  <select id="agg" title="How the group score is aggregated">
+    <option value="avg_nomisery">avg, no misery</option>
+    <option value="avg">plain average</option>
+    <option value="least_misery">least misery</option>
+    <option value="most_pleasure">most pleasure</option>
+  </select>
+  <button id="filters-toggle" class="ghost">Filters</button>
+</nav>
+
+<section id="filters" class="filters hidden"></section>
+<div id="mode-hint" class="mode-hint"></div>
+
+<main>
+  <div id="results" class="grid"></div>
+  <div id="more-wrap" class="more-wrap hidden">
+    <button id="more" class="ghost">Show more</button>
+  </div>
+  <div id="empty" class="empty hidden"></div>
+</main>
+
+<footer>
+  <p>Film metadata and posters from <a href="https://www.themoviedb.org/" rel="noopener">TMDB</a>.
+  This product uses the TMDB API but is not endorsed or certified by TMDB.
+  Streaming availability: <a href="https://www.justwatch.com/" rel="noopener">JustWatch</a>, via TMDB.
+  Viewing histories via each member's public Letterboxd export/RSS; not affiliated with Letterboxd.</p>
+  <p id="veto-note"></p>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

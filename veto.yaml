@@ -1,0 +1,9 @@
+# Group-wide permanent vetoes (SCOPING §11.5). Films listed here are hidden
+# from every mode. Key = Letterboxd film slug (the bit after /film/ in the URL).
+#
+# Example:
+# morbius:
+#   by: zach
+#   why: "we do not speak of it"
+#   date: 2026-08-25
+{}
