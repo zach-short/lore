@@ -8,7 +8,7 @@ import React, {
   useRef,
 } from "react";
 
-import { DEFAULT_FILTERS } from "@/lib/movienight";
+import { DEFAULT_FILTERS } from "@/lib/lore";
 
 import type {
   Aggregation,
@@ -16,10 +16,10 @@ import type {
   Member,
   MemberId,
   Mode,
-} from "@/lib/movienight";
+} from "@/lib/lore";
 import type { ReactNode } from "react";
 
-const STORAGE_KEY = "movienight-app-v1";
+const STORAGE_KEY = "lore-app-v1";
 
 export type SessionState = {
   /** null = everyone (the default before anyone fiddles with chips) */

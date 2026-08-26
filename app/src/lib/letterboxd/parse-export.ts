@@ -3,10 +3,10 @@ import { strFromU8, unzipSync } from "fflate";
 import { parseCsv } from "./csv";
 
 /* Client-side port of the pipeline importer's merge rule
-   (movienight/ingest/importer.py): ratings.csv wins for current taste, diary
+   (lore/ingest/importer.py): ratings.csv wins for current taste, diary
    supplies dates and rewatches, watchlist.csv is an authoritative snapshot,
    likes/films.csv sets the liked flag. The pipeline re-parses the raw zip
-   authoritatively after `movienight pull`; this parse exists so onboarding can
+   authoritatively after `lore pull`; this parse exists so onboarding can
    show the member what their reel contains before it leaves the device. */
 
 export type ParsedFilm = {

@@ -1,7 +1,7 @@
 import { MODES, modeHint, STRINGS } from "@/lib/strings";
 import { Link, Pressable, Text, View } from "@/tw";
 
-import type { Mode } from "@/lib/movienight";
+import type { Mode } from "@/lib/lore";
 
 type ModeTabsProps = {
   mode: Mode;

@@ -2,7 +2,7 @@ import type {
   EvaluationContext,
   Film,
   Member,
-  MovienightData,
+  LoreData,
   Score,
   SeenEntry,
 } from "./types";
@@ -91,7 +91,7 @@ export function mkContext(
   };
 }
 
-export function mkData(films: Film[]): MovienightData {
+export function mkData(films: Film[]): LoreData {
   return {
     generated_at: "2026-08-26T00:00:00Z",
     model_version: "content-v2",

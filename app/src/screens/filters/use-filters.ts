@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 
-import { useMovienightData } from "@/lib/data";
-import { buildCatalogs } from "@/lib/movienight";
+import { useLoreData } from "@/lib/data";
+import { buildCatalogs } from "@/lib/lore";
 import { useSession } from "@/lib/session/session-context";
 
-import type { Aggregation, Filters } from "@/lib/movienight";
+import type { Aggregation, Filters } from "@/lib/lore";
 
 function toggleIn<T>(list: T[], value: T): T[] {
   return list.includes(value)
@@ -13,7 +13,7 @@ function toggleIn<T>(list: T[], value: T): T[] {
 }
 
 export function useFilters() {
-  const query = useMovienightData();
+  const query = useLoreData();
   const { state, dispatch } = useSession();
 
   const catalogs = useMemo(

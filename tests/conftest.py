@@ -13,8 +13,8 @@ from pathlib import Path
 import httpx
 import pytest
 
-from movienight import config as config_mod
-from movienight import db as db_mod
+from lore import config as config_mod
+from lore import db as db_mod
 
 GENRE_IDS = {
     "Thriller": 53, "Crime": 80, "Drama": 18, "Comedy": 35,
@@ -265,7 +265,7 @@ name = "Gabe"
 
 @pytest.fixture
 def tmdb_factory():
-    from movienight.enrich.tmdb import Tmdb
+    from lore.enrich.tmdb import Tmdb
 
     def factory(key, user_agent, min_interval=0.0):
         return Tmdb(key, user_agent, min_interval=0.0, transport=mock_transport())

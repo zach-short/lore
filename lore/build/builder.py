@@ -148,7 +148,7 @@ def run(conn: sqlite3.Connection, cfg: Config) -> None:
     data = json.dumps(payload, separators=(",", ":"), ensure_ascii=False)
     (site / "data.json").write_text(data, encoding="utf-8")
     (site / "data.js").write_text(
-        "window.__MOVIENIGHT__ = " + data + ";", encoding="utf-8"
+        "window.__LORE__ = " + data + ";", encoding="utf-8"
     )
     env = Environment(loader=FileSystemLoader(TEMPLATES), autoescape=True)
     html = env.get_template("index.html.j2").render(

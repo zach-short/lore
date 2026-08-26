@@ -323,7 +323,7 @@ def run(conn: sqlite3.Connection, cfg: Config) -> None:
     scorer = Scorer(conn, cfg)
     if not scorer.vecs:
         print(
-            "score: no enriched films yet — run `movienight enrich` (needs a "
+            "score: no enriched films yet — run `lore enrich` (needs a "
             "TMDB key) first. Nothing to score."
         )
         return

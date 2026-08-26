@@ -9,7 +9,7 @@ import type {
   Member,
   MemberId,
   Mode,
-  MovienightData,
+  LoreData,
   ScoredFilm,
 } from "./types";
 
@@ -25,7 +25,7 @@ export function membersById(members: Member[]): Map<MemberId, Member> {
 }
 
 export function buildContext(
-  data: MovienightData,
+  data: LoreData,
   selection: Selection,
 ): EvaluationContext {
   return {
@@ -41,7 +41,7 @@ export function buildContext(
 
 /** Filter → evaluate → rank. Ties break toward the better-known film. */
 export function computeResults(
-  data: MovienightData,
+  data: LoreData,
   selection: Selection,
 ): ScoredFilm[] {
   if (!selection.subset.length) return [];

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { useMovienightData } from "@/lib/data";
+import { useLoreData } from "@/lib/data";
 import { useCrewMembers } from "@/lib/friends";
 import {
   computeResults,
@@ -9,7 +9,7 @@ import {
   DEFAULT_CONF,
   DEFAULT_FEAT,
   membersById,
-} from "@/lib/movienight";
+} from "@/lib/lore";
 import { effectiveSubset, useSession } from "@/lib/session/session-context";
 
 import type {
@@ -19,7 +19,7 @@ import type {
   MemberId,
   Mode,
   ScoredFilm,
-} from "@/lib/movienight";
+} from "@/lib/lore";
 
 export type CardContext = {
   subset: MemberId[];
@@ -31,7 +31,7 @@ export type CardContext = {
 
 /** Everything the Tonight screen renders, derived in one place. */
 export function useTonight() {
-  const query = useMovienightData();
+  const query = useLoreData();
   const { state, dispatch } = useSession();
   const data = query.data;
 

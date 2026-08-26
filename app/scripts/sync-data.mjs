@@ -1,7 +1,7 @@
 /* Copies the pipeline's site/data.json into the app:
    - public/data.json          → served same-origin on web (dev + static export)
    - src/lib/data/snapshot.json → bundled offline fallback for native
-   Run `movienight all` (repo root) first to refresh the payload itself. */
+   Run `lore all` (repo root) first to refresh the payload itself. */
 import { copyFileSync, existsSync, mkdirSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,7 +15,7 @@ const targets = [
 
 if (!existsSync(source)) {
   console.error(
-    `movienight: ${source} not found — run the pipeline first (uv run movienight all).`,
+    `lore: ${source} not found — run the pipeline first (uv run lore all).`,
   );
   process.exit(1);
 }
@@ -26,4 +26,4 @@ for (const target of targets) {
 }
 
 const kb = Math.round(statSync(source).size / 1024);
-console.log(`movienight: synced data.json (${kb} KB) → public/ + snapshot`);
+console.log(`lore: synced data.json (${kb} KB) → public/ + snapshot`);

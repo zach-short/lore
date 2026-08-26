@@ -1,6 +1,6 @@
 # Manual film-identity overrides (SCOPING §5 step 3): Letterboxd slug → TMDB id.
 # Films the automatic resolver can't place land in data/resolution_report.md
-# with a search link; paste the right TMDB id here and re-run `movienight enrich`.
+# with a search link; paste the right TMDB id here and re-run `lore enrich`.
 # When the report shows a `~123` key instead of a slug (export rows with
 # boxd.it short links have no slug), use that key verbatim.
 #

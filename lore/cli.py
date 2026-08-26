@@ -1,8 +1,8 @@
-"""movienight CLI (SCOPING §3):
+"""lore CLI (SCOPING §3):
 pull | import | sync | enrich | score | build | publish | all.
 
 Run from the project root (where config.toml lives). Phase 1 is on-demand:
-`movienight all` chains everything and site/index.html is the product."""
+`lore all` chains everything and site/index.html is the product."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ from . import db
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
-        prog="movienight",
+        prog="lore",
         description="Group movie recommender over public Letterboxd histories.",
     )
     parser.add_argument(

@@ -1,4 +1,4 @@
-/* Schema of site/data.json as emitted by `movienight build` (SCOPING §6):
+/* Schema of site/data.json as emitted by `lore build` (SCOPING §6):
    precomputed per-member × per-film scores; the app only filters/aggregates. */
 
 export type MemberId = number;
@@ -122,7 +122,7 @@ export type VetoEntry = {
   date?: string;
 };
 
-export type MovienightData = {
+export type LoreData = {
   generated_at: string;
   model_version: string;
   conf?: ConfBands;

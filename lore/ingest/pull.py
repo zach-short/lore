@@ -146,7 +146,7 @@ def run(conn: sqlite3.Connection, cfg: Config, supa: Supa | None = None) -> None
     cfg.exports_dir.mkdir(parents=True, exist_ok=True)
     for up in uploads:
         # Timestamp prefix so a member's re-upload sorts after their original
-        # when `movienight all` later re-imports everything in filename order.
+        # when `lore all` later re-imports everything in filename order.
         stamp = "".join(c for c in up["created_at"][:19] if c.isdigit())
         dest = cfg.exports_dir / f"pulled-{stamp}-{up['file_name']}"
         dest.write_bytes(supa.download(up["object_path"]))

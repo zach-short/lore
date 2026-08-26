@@ -1,5 +1,5 @@
-"""`movienight pull`: download app-uploaded zips, import, mark status —
-plus the profile→member sync and `movienight publish` that share its client."""
+"""`lore pull`: download app-uploaded zips, import, mark status —
+plus the profile→member sync and `lore publish` that share its client."""
 
 from __future__ import annotations
 
@@ -7,8 +7,8 @@ import json
 
 import httpx
 
-from movienight import publish
-from movienight.ingest.pull import Supa, run, sync_profile_members
+from lore import publish
+from lore.ingest.pull import Supa, run, sync_profile_members
 
 from tests.conftest import make_zip
 
@@ -92,7 +92,7 @@ def test_pull_imports_known_member_and_marks_imported(project, tmp_path):
     assert patches == [{"id": "eq.u-1", "status": "imported",
                         "imported_at": patches[0]["imported_at"]}]
     # The zip lands in exports_dir with a sortable timestamp prefix so later
-    # `movienight all` runs re-import it in upload order.
+    # `lore all` runs re-import it in upload order.
     saved = list(cfg.exports_dir.glob("pulled-*.zip"))
     assert saved and saved[0].name.startswith("pulled-20260826")
 

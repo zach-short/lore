@@ -11,7 +11,7 @@ import {
   metaLine,
   reasonFor,
   tmdbUrl,
-} from "@/lib/movienight";
+} from "@/lib/lore";
 import { dismissOrHome } from "@/lib/navigation";
 import { STRINGS } from "@/lib/strings";
 import { Link, Pressable, ScrollView, Text, View } from "@/tw";

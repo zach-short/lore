@@ -1,4 +1,4 @@
-# movienight configuration. Members' Letterboxd profiles must be public.
+# lore configuration. Members' Letterboxd profiles must be public.
 
 region = "US"
 

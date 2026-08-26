@@ -46,7 +46,7 @@ class Config:
     @property
     def user_agent(self) -> str:
         contact = f" (+mailto:{self.contact})" if self.contact else ""
-        return f"movienight/0.1{contact}"
+        return f"lore/0.1{contact}"
 
     @property
     def tmdb_key(self) -> str | None:

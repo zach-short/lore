@@ -1,7 +1,7 @@
-import { starStr, THIN_HISTORY } from "@/lib/movienight";
+import { starStr, THIN_HISTORY } from "@/lib/lore";
 import { Link, Text, View } from "@/tw";
 
-import type { Member } from "@/lib/movienight";
+import type { Member } from "@/lib/lore";
 
 type MemberCardProps = {
   member: Member;

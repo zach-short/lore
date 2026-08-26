@@ -1,4 +1,4 @@
-# movienight
+# Lore
 
 Group movie recommender for our Letterboxd friend group. Ingests everyone's
 public histories (one-time CSV export + daily RSS), enriches with TMDB,
@@ -13,23 +13,23 @@ filtered, justified picks.
 ```bash
 uv sync                       # once: install deps into .venv
 cp .env.example .env          # once: add your TMDB key (themoviedb.org/settings/api)
-uv run movienight all         # import → sync → enrich → score → build
+uv run lore all         # import → sync → enrich → score → build
 open site/index.html          # the product
 ```
 
-`movienight all` is idempotent — run it whenever you want fresh data.
+`lore all` is idempotent — run it whenever you want fresh data.
 
 ## Commands
 
 | Command | What it does |
 |---|---|
-| `movienight pull` | Download export zips members uploaded through the app (Supabase bucket) into `data/exports/` and import them. Skips itself when `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` are unset. |
-| `movienight publish` | Upload `site/data.json` to the Supabase `site-data` bucket, where the app reads it at runtime — data refreshes never need an app redeploy. Same skip rule as `pull`. |
-| `movienight import` | Parse `data/exports/*.zip` (Letterboxd account exports). Idempotent upserts; re-import a fresh zip any time. |
-| `movienight sync` | Poll each member's public RSS feed (≈50 recent diary entries, arrives with TMDB ids). One polite request per member. |
-| `movienight enrich` | Resolve films → TMDB ids (search + `overrides.yaml`), fetch metadata/providers (one cached call per film ever), build the discover candidate pool, write `data/resolution_report.md`. |
-| `movienight score` | Fit per-member taste models, score every enriched film per member. `--eval` runs the temporal-holdout evaluation instead. |
-| `movienight build` | Emit `site/` (index.html + data.js). Works from `file://`. |
+| `lore pull` | Download export zips members uploaded through the app (Supabase bucket) into `data/exports/` and import them. Skips itself when `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` are unset. |
+| `lore publish` | Upload `site/data.json` to the Supabase `site-data` bucket, where the app reads it at runtime — data refreshes never need an app redeploy. Same skip rule as `pull`. |
+| `lore import` | Parse `data/exports/*.zip` (Letterboxd account exports). Idempotent upserts; re-import a fresh zip any time. |
+| `lore sync` | Poll each member's public RSS feed (≈50 recent diary entries, arrives with TMDB ids). One polite request per member. |
+| `lore enrich` | Resolve films → TMDB ids (search + `overrides.yaml`), fetch metadata/providers (one cached call per film ever), build the discover candidate pool, write `data/resolution_report.md`. |
+| `lore score` | Fit per-member taste models, score every enriched film per member. `--eval` runs the temporal-holdout evaluation instead. |
+| `lore build` | Emit `site/` (index.html + data.js). Works from `file://`. |
 
 ## Member onboarding (one-time, ~2 min each)
 
@@ -37,8 +37,8 @@ open site/index.html          # the product
 2. Hand over the zip, either way:
    - **In the app** (preferred): sign in, and onboarding walks you through
      uploading the zip. It's parsed on your device for a summary, stored in
-     the group's private Supabase bucket, and `movienight pull` (part of
-     `movienight all`) imports it on the next pipeline run.
+     the group's private Supabase bucket, and `lore pull` (part of
+     `lore all`) imports it on the next pipeline run.
    - **Old school**: send the zip to Zach; it lands in `data/exports/`
      (don't rename — the `letterboxd-<user>-…` filename identifies whose it
      is).
@@ -88,11 +88,11 @@ item-item CF (support-gated), drift detection, eval in CI.
 
 ## Running unattended
 
-A LaunchAgent (`~/Library/LaunchAgents/com.movienight.pipeline.plist`) runs
-`movienight all` daily at 6:30 AM (missed runs fire on wake), logging to
+A LaunchAgent (`~/Library/LaunchAgents/com.lore.pipeline.plist`) runs
+`lore all` daily at 6:30 AM (missed runs fire on wake), logging to
 `data/pipeline.log`. That's the whole loop: members upload zips in the app →
 `pull` imports them → `publish` puts fresh scores where the app reads them.
-Remove with `launchctl bootout gui/$(id -u)/com.movienight.pipeline`.
+Remove with `launchctl bootout gui/$(id -u)/com.lore.pipeline`.
 Phase 2 moves this to a GitHub Actions cron (needs a home for `data/movies.db`
 state first — see SCOPING §8).
 
@@ -101,7 +101,14 @@ state first — see SCOPING §8).
 **The app (web)**: `cd app && bun run deploy:web` — static Expo export staged
 by `scripts/prepare-deploy.mjs`, deployed to Vercel (`movienight` project,
 https://movienight-zeta.vercel.app). Redeploy only for code changes; data
-refreshes flow through `movienight publish`.
+refreshes flow through `lore publish`.
+
+The Vercel project keeps its pre-rename name on purpose: the staging dir name
+in `prepare-deploy.mjs` *is* the project name, so renaming it creates a second
+project on a new URL and strands both the live site and the auth redirect URLs
+pinned in `supabase/config.toml`. Moving to a `lore` URL is a deliberate step —
+rename the project in the Vercel dashboard, then update the staging dir and
+`supabase/config.toml` (`site_url` + `additional_redirect_urls`) together.
 
 **The legacy static site** in `site/` still works from any static host
 (`wrangler pages deploy site/` per SCOPING) but the app is the product now.

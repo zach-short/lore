@@ -1,20 +1,20 @@
-/* movienight client — all filtering/aggregation happens here, on precomputed
+/* lore client — all filtering/aggregation happens here, on precomputed
    per-member scores shipped in data.js (SCOPING §1: the page feels like an
    app; there is no backend). Vanilla JS on purpose. */
 (function () {
   "use strict";
-  var D = window.__MOVIENIGHT__;
+  var D = window.__LORE__;
   var $ = function (id) { return document.getElementById(id); };
 
   if (!D || !D.members || !D.members.length || !D.films || !D.films.length) {
     $("empty").classList.remove("hidden");
     $("empty").innerHTML =
-      "<h2>No scored films yet</h2><p>Run the pipeline: <code>movienight all</code> " +
+      "<h2>No scored films yet</h2><p>Run the pipeline: <code>lore all</code> " +
       "(needs a TMDB key in <code>.env</code> — see README).</p>";
     return;
   }
 
-  var LS_KEY = "movienight-v1";
+  var LS_KEY = "lore-v1";
   var PAGE = 24;
   var MISERY_STARS = 2.5, MISERY_CONF = 0.2;
   var REWATCH_Z = 0.5, EVANGELIST_MIN = 4.0;

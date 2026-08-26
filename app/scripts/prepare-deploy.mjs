@@ -1,5 +1,8 @@
 /* Stages dist/ into .deploy/movienight for a prebuilt Vercel deploy:
-   - the staging dir's *name* becomes the Vercel project name on first deploy
+   - the staging dir's *name* becomes the Vercel project name on first deploy,
+     so it stays "movienight" even after the Lore rename: renaming it would
+     spin up a second Vercel project on a new URL, orphaning the live site at
+     movienight-zeta.vercel.app and the auth redirect URLs in supabase/config.toml
    - film/[id].html is copied to film/detail.html because bracket paths are
      unreliable as rewrite destinations; vercel.json points /film/:id there
    Run via `bun run deploy:web` (export → stage → vercel deploy --prod). */
@@ -37,4 +40,4 @@ writeFileSync(
   ) + "\n",
 );
 
-console.log(`movienight: staged web deploy → ${stage}`);
+console.log(`lore: staged web deploy → ${stage}`);

@@ -1,7 +1,7 @@
 """Import + RSS ingestion: idempotency, both URI styles, identity convergence."""
 
-from movienight import db
-from movienight.ingest import importer, rss
+from lore import db
+from lore.ingest import importer, rss
 from tests.conftest import make_zip
 
 RSS_XML = """<?xml version='1.0' encoding='utf-8'?>

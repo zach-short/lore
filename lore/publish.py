@@ -2,7 +2,7 @@
 
 The app downloads it at runtime (signed-in members only), so a pipeline run
 refreshes everyone's picks without redeploying the web app. Same credential
-rule as `movienight pull`: no SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY means
+rule as `lore pull`: no SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY means
 announce and skip."""
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ def run(cfg: Config, supa: Supa | None = None) -> None:
     data_path = cfg.site_dir / "data.json"
     if not data_path.exists():
         raise SystemExit(
-            f"publish: {data_path} not found — run `movienight build` first."
+            f"publish: {data_path} not found — run `lore build` first."
         )
     content = data_path.read_bytes()
     supa.upload_site_data(content)

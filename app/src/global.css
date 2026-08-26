@@ -8,7 +8,7 @@
   }
 }
 
-/* ── movienight tokens ──────────────────────────────────────────────────────
+/* ── lore tokens ──────────────────────────────────────────────────────
    One definition per token, resolved per color scheme with light-dark().
    Dark is the primary design ("house lights down"); light is the matinee.
    Components never use raw hex — only the semantic names registered below. */

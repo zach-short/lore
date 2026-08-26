@@ -1,6 +1,6 @@
-# movienight app
+# lore app
 
-Universal Expo app (web + iOS + Android) for the movienight picker. The Python
+Universal Expo app (web + iOS + Android) for the lore picker. The Python
 pipeline at the repo root stays the brain — it emits `site/data.json` with
 precomputed per-member × per-film scores; this app is the face: it loads that
 payload and does all subset/mode/filter aggregation on device. No backend.
@@ -18,7 +18,7 @@ bun run android  # Android emulator via Expo Go
 Every start script runs `sync-data` first, which copies `../site/data.json`
 into `public/data.json` (served same-origin on web) and
 `src/lib/data/snapshot.json` (bundled into native builds as the offline
-fallback). Refresh the payload itself with `uv run movienight all` at the repo
+fallback). Refresh the payload itself with `uv run lore all` at the repo
 root, then restart or re-run `bun run sync-data`.
 
 Optional: set `EXPO_PUBLIC_DATA_URL` to a deployed `data.json` URL and native
@@ -48,7 +48,7 @@ server. Native store builds are an EAS concern for later (`eas build`).
 - `src/app/` — Expo Router routes only (thin: each renders one screen)
 - `src/screens/<name>/` — screen bodies + their private components and hooks
 - `src/components/` — shared UI (chips, poster, data states, tabs)
-- `src/lib/movienight/` — the typed domain port of the site's client logic
+- `src/lib/lore/` — the typed domain port of the site's client logic
   (modes, aggregation, misery floor, filters, reasons) with colocated tests
 - `src/lib/data/` — payload loading (platform-split web/native) + query keys
 - `src/lib/session/` — tonight's-crew/mode/filter state, persisted locally

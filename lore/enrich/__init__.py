@@ -56,7 +56,7 @@ def run(conn: sqlite3.Connection, cfg: Config, tmdb_factory=None) -> None:
             "enrich: no TMDB_API_KEY set — skipping search resolution, metadata,\n"
             "        and pool discovery. Register a free key at\n"
             "        https://www.themoviedb.org/settings/api and put it in .env\n"
-            "        (see .env.example), then re-run `movienight enrich`."
+            "        (see .env.example), then re-run `lore enrich`."
         )
         resolve.write_report(conn, cfg)
         return

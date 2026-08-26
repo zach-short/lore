@@ -1,7 +1,7 @@
-import { featLabel, scoreOf, seenOf, starStr } from "@/lib/movienight";
+import { featLabel, scoreOf, seenOf, starStr } from "@/lib/lore";
 import { Text, View } from "@/tw";
 
-import type { ConfBands, Film, Member } from "@/lib/movienight";
+import type { ConfBands, Film, Member } from "@/lib/lore";
 
 type BallotRowProps = {
   member: Member;

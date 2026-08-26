@@ -1,6 +1,6 @@
 import { useColorScheme } from "react-native";
 
-import { TMDB_POSTER_BASE } from "@/lib/movienight";
+import { TMDB_POSTER_BASE } from "@/lib/lore";
 import { paletteFor } from "@/theme";
 import { Text, View } from "@/tw";
 import { Image } from "@/tw/image";

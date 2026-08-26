@@ -2,7 +2,7 @@
 import { Chip } from "@/components/chip";
 import { SectionLabel } from "@/components/section-label";
 import { dismissOrHome } from "@/lib/navigation";
-import { langName, topKeys } from "@/lib/movienight";
+import { langName, topKeys } from "@/lib/lore";
 import { AGG_HINTS, AGG_LABELS, AGG_ORDER, STRINGS } from "@/lib/strings";
 import { Pressable, ScrollView, Text, View } from "@/tw";
 

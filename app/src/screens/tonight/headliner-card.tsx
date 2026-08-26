@@ -8,11 +8,11 @@ import {
   metaLine,
   providerSummary,
   reasonFor,
-} from "@/lib/movienight";
+} from "@/lib/lore";
 import { STRINGS } from "@/lib/strings";
 import { Link, Pressable, Text, View } from "@/tw";
 
-import type { ScoredFilm } from "@/lib/movienight";
+import type { ScoredFilm } from "@/lib/lore";
 import type { CardContext } from "./use-tonight";
 
 type HeadlinerCardProps = {

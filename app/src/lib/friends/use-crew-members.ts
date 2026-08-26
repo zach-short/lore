@@ -5,7 +5,7 @@ import { isSupabaseConfigured } from "@/lib/supabase";
 
 import { useFriends } from "./use-friends";
 
-import type { Member } from "@/lib/movienight";
+import type { Member } from "@/lib/lore";
 import type { Profile } from "@/lib/supabase";
 
 export type CrewMembers = {

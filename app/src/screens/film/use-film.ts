@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 
-import { useMovienightData } from "@/lib/data";
+import { useLoreData } from "@/lib/data";
 import {
   DEFAULT_CONF,
   DEFAULT_FEAT,
   membersById,
   starsFor,
-} from "@/lib/movienight";
+} from "@/lib/lore";
 import { effectiveSubset, useSession } from "@/lib/session/session-context";
 
-import type { Film, Member, MemberId } from "@/lib/movienight";
+import type { Film, Member, MemberId } from "@/lib/lore";
 
 export type FilmDetail = {
   film: Film;
@@ -23,7 +23,7 @@ export type FilmDetail = {
 };
 
 export function useFilm(filmId: number | null) {
-  const query = useMovienightData();
+  const query = useLoreData();
   const { state } = useSession();
   const data = query.data;
 

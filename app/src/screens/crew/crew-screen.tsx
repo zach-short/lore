@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 import { DataEmpty, DataError, DataLoading } from "@/components/data-state";
 import { ScreenShell } from "@/components/screen-shell";
 import { SectionLabel } from "@/components/section-label";
-import { useMovienightData } from "@/lib/data";
+import { useLoreData } from "@/lib/data";
 import { useCrewMembers, useFriendActions, useFriends } from "@/lib/friends";
 import { STRINGS } from "@/lib/strings";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
@@ -14,7 +14,7 @@ import { FriendSearch } from "./friend-search";
 import { ProfileRow } from "./friend-rows";
 import { MemberCard } from "./member-card";
 
-import type { MovienightData } from "@/lib/movienight";
+import type { LoreData } from "@/lib/lore";
 
 type RemoveFriendLinkProps = {
   label: string;
@@ -37,7 +37,7 @@ function RemoveFriendLink({ label, isDisabled, onPress }: RemoveFriendLinkProps)
 }
 
 export function CrewScreen() {
-  const query = useMovienightData();
+  const query = useLoreData();
 
   let body;
   if (query.isPending) {
@@ -58,7 +58,7 @@ export function CrewScreen() {
   return <ScreenShell>{body}</ScreenShell>;
 }
 
-type CrewBodyProps = { data: MovienightData };
+type CrewBodyProps = { data: LoreData };
 
 function CrewBody({ data }: CrewBodyProps) {
   const crew = useCrewMembers(data.members);
@@ -163,7 +163,7 @@ function CrewBody({ data }: CrewBodyProps) {
       <View className="gap-1 pt-2">
         <SectionLabel>The projector</SectionLabel>
         <Text className="text-xs leading-4 text-faint">
-          Scores are precomputed by the movienight pipeline from everyone’s
+          Scores are precomputed by the lore pipeline from everyone’s
           Letterboxd exports and public RSS — model {data.model_version},
           reel from {new Date(data.generated_at).toLocaleString()}. Picking a
           different crew or filter re-ranks instantly on this device; nothing

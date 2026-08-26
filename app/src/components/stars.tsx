@@ -1,5 +1,5 @@
 
-import { starStr } from "@/lib/movienight";
+import { starStr } from "@/lib/lore";
 import { Text } from "@/tw";
 
 type StarsProps = {

@@ -6,7 +6,7 @@ import { DEFAULT_FILTERS } from "./filters";
 import { mkData, mkFilm, mkScore } from "./fixtures";
 import { computeResults } from "./select";
 
-import type { MovienightData } from "./types";
+import type { LoreData } from "./types";
 
 function selection(overrides: Partial<Parameters<typeof computeResults>[1]> = {}) {
   return {
@@ -43,7 +43,7 @@ const realDataPath = fileURLToPath(
 );
 
 describe.skipIf(!existsSync(realDataPath))("against the real payload", () => {
-  const data = JSON.parse(readFileSync(realDataPath, "utf8")) as MovienightData;
+  const data = JSON.parse(readFileSync(realDataPath, "utf8")) as LoreData;
   const everyone = data.members.map((m) => m.id);
 
   it("yields a healthy blind-spot pool for the whole group", () => {

@@ -1,7 +1,7 @@
 # Group Movie Recommender — Scoping Document
 
 **Status:** scoping only, no code yet. **Date:** 2026-08-25.
-**Working name:** `movienight` (rename freely).
+**Name:** `lore` (was `movienight`; renamed 2026-08-26).
 
 A tool that ingests a small friend group's public Letterboxd histories and produces
 ranked, filtered, explainable recommendations for whoever is in the room tonight.
@@ -149,7 +149,7 @@ tonight's-group picker (client-side)"]
   F2 --> F3
 ```
 
-Everything left of "Serving" is one CLI (`movienight <cmd>`) run on demand
+Everything left of "Serving" is one CLI (`lore <cmd>`) run on demand
 (phase 1) or by cron (phase 2). The browser never talks to anything but static
 files; per-session group selection works because `data.json` carries
 per-member scores and the page aggregates for the selected subset on the fly.
@@ -264,7 +264,7 @@ literally the one Letterboxd tells hobbyists to build.**
 ### 4e. Politeness spec (applies to everything we fetch)
 
 - RSS poller: one request per member per day, sequential with 2 s spacing,
-  honest User-Agent `movienight/0.1 (+mailto:<your-contact>)`, conditional GET
+  honest User-Agent `lore/0.1 (+mailto:<your-contact>)`, conditional GET
   (`If-Modified-Since`/ETag) if the server honors it, exponential backoff and
   a skipped cycle on any 403/429.
 - All fetched resources cached in SQLite with `fetched_at`; nothing is ever
@@ -526,36 +526,36 @@ surfaced on the page, not hidden in a notebook.
 Deliverable: run four commands, get a URL, pick tonight's movie from it.
 
 1. **Scaffold** (0.5 d): `git init`; `uv init`; package layout
-   `movienight/{ingest,enrich,model,build}`; `config.toml` seeded with
+   `lore/{ingest,enrich,model,build}`; `config.toml` seeded with
    `members = [{username = "zachshort", name = "Zach"}, …]`, `region = "US"`,
    `services = [...]`; empty `veto.yaml`, `overrides.yaml`; schema migration
    on first run.
-2. **`movienight import data/exports/*.zip`** (0.5 d): parse the four CSVs per
+2. **`lore import data/exports/*.zip`** (0.5 d): parse the four CSVs per
    member (columns as §4a), idempotent upserts into `interaction`/`diary_entry`,
    slug extraction from URIs, ratings.csv-wins merge rule.
-3. **`movienight sync`** (0.25 d): RSS poll per member with the politeness spec
+3. **`lore sync`** (0.25 d): RSS poll per member with the politeness spec
    (§4e); parse the verified fields incl. `tmdb:movieId`; upsert; record
    `rss_state`; ignore list-activity items for now.
-4. **`movienight enrich`** (0.75 d): resolution ladder steps 1–3 (§5) +
+4. **`lore enrich`** (0.75 d): resolution ladder steps 1–3 (§5) +
    `resolution_report.md`; TMDB fetch with `append_to_response`; provider
    cache; candidate-pool discovery queries; rate limiter + retries.
-5. **`movienight score`** (1 d): z-scores with shrinkage, film vectors, member
+5. **`lore score`** (1 d): z-scores with shrinkage, film vectors, member
    profiles, calibration, prior blend, confidence, components JSON;
    `--eval` flag runs the temporal holdout and prints the report (§7a).
-6. **`movienight build`** (1 d): Jinja2 → `site/index.html` + `data.json`;
+6. **`lore build`** (1 d): Jinja2 → `site/index.html` + `data.json`;
    client-side (vanilla JS): mode tabs (Blind spot / Evangelist / Rewatch),
    member checkboxes for tonight's subset, aggregation default + toggles,
    filters — streaming services (flatrate; "include rentals" toggle), runtime
    cap, decade, original language, genre exclusions, veto — reason line,
    poster (TMDB CDN), who's-seen chips, TMDB + JustWatch attribution footer.
-7. **Deploy** (0.25 d): `movienight all` chains the above;
+7. **Deploy** (0.25 d): `lore all` chains the above;
    `wrangler pages deploy site/` to Cloudflare Pages (free, supports direct
    upload so the repo stays private; GitHub Pages free tier would force the
    repo public). Alternative: literally open `site/index.html` — it works from
    disk.
 
 **Acceptance criteria** (hand this section back as the build task):
-- `movienight all` runs end-to-end on a laptop in <15 min from zips + feeds.
+- `lore all` runs end-to-end on a laptop in <15 min from zips + feeds.
 - ≥97% of backfilled films auto-resolve; the rest are listed with fix links.
 - Blind spot for the full group yields ≥50 candidates pre-filter, every card
   has a reason string, and no vetoed/excluded film ever renders in any mode.

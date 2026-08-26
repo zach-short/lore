@@ -23,7 +23,7 @@ Read the exact versioned docs at https://docs.expo.dev/versions/v57.0.0/ before 
 - Data: TanStack Query only, keys from `src/lib/data/query-keys.ts` (domain
   root first). Loading/error/empty render through `DataLoading`/`DataError`
   (onRetry required)/`DataEmpty`.
-- Pure domain logic lives in `src/lib/movienight/` with colocated `*.test.ts`
+- Pure domain logic lives in `src/lib/lore/` with colocated `*.test.ts`
   (vitest). Write/adjust tests when touching scoring, filters, or reasons —
   they pin parity with the pipeline's `site/app.js` semantics.
 - Platform divergence is by `.web.tsx` sibling files (tabs, data loading), not

@@ -60,7 +60,7 @@ export type {
   Member,
   MemberId,
   Mode,
-  MovienightData,
+  LoreData,
   Providers,
   Score,
   ScoredFilm,

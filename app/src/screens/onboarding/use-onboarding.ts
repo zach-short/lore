@@ -3,7 +3,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { useRef, useState } from "react";
 
 import { useAuth } from "@/lib/auth";
-import { useMovienightData } from "@/lib/data";
+import { useLoreData } from "@/lib/data";
 import { readAssetBytes } from "@/lib/files";
 import { ExportParseError, parseExportZip } from "@/lib/letterboxd";
 import { queryKeys } from "@/lib/data/query-keys";
@@ -23,7 +23,7 @@ const ZIP_TYPES = [
 export function useOnboarding() {
   const { session } = useAuth();
   const queryClient = useQueryClient();
-  const dataQuery = useMovienightData();
+  const dataQuery = useLoreData();
 
   const bytesRef = useRef<Uint8Array | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);

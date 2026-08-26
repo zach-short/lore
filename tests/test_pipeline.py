@@ -5,10 +5,10 @@ import json
 
 import yaml
 
-from movienight import db, enrich
-from movienight.build import builder
-from movienight.ingest import importer
-from movienight.model import evaluate, score
+from lore import db, enrich
+from lore.build import builder
+from lore.ingest import importer
+from lore.model import evaluate, score
 from tests.conftest import catalog_ratings, make_zip
 
 

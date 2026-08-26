@@ -1,10 +1,10 @@
 import { Chip } from "@/components/chip";
 import { SectionLabel } from "@/components/section-label";
-import { andList } from "@/lib/movienight";
+import { andList } from "@/lib/lore";
 import { STRINGS } from "@/lib/strings";
 import { Text, View } from "@/tw";
 
-import type { ConfidenceNote, Member, MemberId } from "@/lib/movienight";
+import type { ConfidenceNote, Member, MemberId } from "@/lib/lore";
 
 type MemberPickerProps = {
   members: Member[];

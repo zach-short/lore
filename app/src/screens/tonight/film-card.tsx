@@ -3,11 +3,11 @@ import { memo } from "react";
 import { MemberScoreChips } from "@/components/member-score-chips";
 import { Poster } from "@/components/poster";
 import { Stars } from "@/components/stars";
-import { metaLine, providerSummary, reasonFor } from "@/lib/movienight";
+import { metaLine, providerSummary, reasonFor } from "@/lib/lore";
 import { STRINGS } from "@/lib/strings";
 import { Link, Pressable, Text, View } from "@/tw";
 
-import type { ScoredFilm } from "@/lib/movienight";
+import type { ScoredFilm } from "@/lib/lore";
 import type { CardContext } from "./use-tonight";
 
 type FilmCardProps = {

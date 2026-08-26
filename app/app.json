@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Movienight",
-    "slug": "movienight",
+    "name": "Lore",
+    "slug": "lore",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "movienight",
+    "scheme": "lore",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
@@ -32,6 +32,7 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76,
           "dark": {
+            "image": "./assets/images/splash-icon-dark.png",
             "backgroundColor": "#16120d"
           }
         }

@@ -14,7 +14,7 @@ import { MemberPicker } from "./member-picker";
 import { ModeTabs } from "./mode-tabs";
 import { useTonight } from "./use-tonight";
 
-import type { ScoredFilm } from "@/lib/movienight";
+import type { ScoredFilm } from "@/lib/lore";
 
 export function TonightScreen() {
   const {

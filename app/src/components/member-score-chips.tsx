@@ -1,7 +1,7 @@
-import { scoreOf, seenOf, starStr } from "@/lib/movienight";
+import { scoreOf, seenOf, starStr } from "@/lib/lore";
 import { Text, View } from "@/tw";
 
-import type { Film, Member, MemberId } from "@/lib/movienight";
+import type { Film, Member, MemberId } from "@/lib/lore";
 
 type MemberScoreChipsProps = {
   film: Film;

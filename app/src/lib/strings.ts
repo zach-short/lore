@@ -1,4 +1,4 @@
-import type { Aggregation, Mode } from "@/lib/movienight";
+import type { Aggregation, Mode } from "@/lib/lore";
 
 /* Every user-facing string lives here so wording can't fork across screens
    (and one day across platforms). Keep the pipeline's honest voice. */
@@ -42,7 +42,7 @@ export const AGG_HINTS: Record<Aggregation, string> = {
 };
 
 export const STRINGS = {
-  appName: "Movienight",
+  appName: "Lore",
   tonightLabel: "Tonight",
   nowShowing: "Tonight’s pick",
   runnersUp: "The undercard",
@@ -50,7 +50,7 @@ export const STRINGS = {
   crewTitle: "The crew",
   noData: {
     title: "No scored films yet",
-    body: "Run the pipeline: uv run movienight all (needs a TMDB key in .env — see the repo README).",
+    body: "Run the pipeline: uv run lore all (needs a TMDB key in .env — see the repo README).",
   },
   noSubset: { title: "Pick at least one person" },
   noCrew: {

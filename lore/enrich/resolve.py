@@ -175,7 +175,7 @@ def write_report(conn: sqlite3.Connection, cfg: Config) -> None:
             "## Needs a manual override",
             "",
             "Find the film on TMDB, then add `slug: tmdb_id` to `overrides.yaml`",
-            "and re-run `movienight enrich`.",
+            "and re-run `lore enrich`.",
             "",
             "| Film | Year | Slug | Status | Who | Search |",
             "|---|---|---|---|---|---|",
