@@ -1,5 +1,6 @@
 import { KeyboardAvoidingView, Platform } from "react-native";
 
+import { LogoMark } from "@/components/logo-mark";
 import { ScreenShell } from "@/components/screen-shell";
 import { SectionLabel } from "@/components/section-label";
 import { isSupabaseConfigured } from "@/lib/supabase";
@@ -20,15 +21,18 @@ export function LoginScreen() {
           contentContainerClassName="gap-4 px-4 pb-16 pt-6"
           keyboardShouldPersistTaps="handled"
         >
-          <View className="gap-1">
-            <SectionLabel>{STRINGS.login.eyebrow}</SectionLabel>
-            <Text className="font-display text-5xl leading-[52px] text-ink">
-              {STRINGS.login.title.toUpperCase()}
-              <Text className="text-lamp">.</Text>
-            </Text>
-            <Text className="text-base leading-5 text-muted">
-              {STRINGS.login.intro}
-            </Text>
+          <View className="gap-4 pt-2">
+            <LogoMark className="h-16 w-16" />
+            <View className="gap-1">
+              <SectionLabel>{STRINGS.login.eyebrow}</SectionLabel>
+              <Text className="font-display text-5xl leading-[52px] text-ink">
+                {STRINGS.login.title.toUpperCase()}
+                <Text className="text-lamp">.</Text>
+              </Text>
+              <Text className="text-base leading-5 text-muted">
+                {STRINGS.login.intro}
+              </Text>
+            </View>
           </View>
           {isSupabaseConfigured ? (
             <LoginForm />

@@ -1,5 +1,6 @@
 import { Slot, usePathname } from "expo-router";
 
+import { LogoMark } from "@/components/logo-mark";
 import { STRINGS } from "@/lib/strings";
 import { Link, Text, View } from "@/tw";
 
@@ -17,10 +18,13 @@ export function AppTabs() {
     <View className="flex-1 bg-bg">
       <View className="border-b border-line bg-bg">
         <View className="w-full max-w-3xl flex-row items-center justify-between self-center px-4 py-3">
-          <Link href="/" className="font-display text-2xl text-ink">
-            {STRINGS.appName.toUpperCase()}
-            <Text className="text-lamp">.</Text>
-          </Link>
+          <View className="flex-row items-center gap-2">
+            <LogoMark className="h-6 w-6" />
+            <Link href="/" className="font-display text-2xl text-ink">
+              {STRINGS.appName.toUpperCase()}
+              <Text className="text-lamp">.</Text>
+            </Link>
+          </View>
           <View className="flex-row items-center gap-5">
             {TABS.map((tab) => {
               const isActive =

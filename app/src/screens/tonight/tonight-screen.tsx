@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { Platform } from "react-native";
 
 import { DataEmpty, DataError, DataLoading } from "@/components/data-state";
+import { LogoMark } from "@/components/logo-mark";
 import { ScreenShell } from "@/components/screen-shell";
 import { SectionLabel } from "@/components/section-label";
 import { STRINGS } from "@/lib/strings";
@@ -151,10 +152,13 @@ type WordmarkProps = { generatedAt: string };
 function Wordmark({ generatedAt }: WordmarkProps) {
   return (
     <View className="flex-row items-end justify-between">
-      <Text className="font-display text-4xl leading-10 text-ink">
-        {STRINGS.appName.toUpperCase()}
-        <Text className="text-lamp">.</Text>
-      </Text>
+      <View className="flex-row items-center gap-2">
+        <LogoMark className="h-9 w-9" />
+        <Text className="font-display text-4xl leading-10 text-ink">
+          {STRINGS.appName.toUpperCase()}
+          <Text className="text-lamp">.</Text>
+        </Text>
+      </View>
       <Text className="pb-1 text-xs text-faint">{reelDate(generatedAt)}</Text>
     </View>
   );

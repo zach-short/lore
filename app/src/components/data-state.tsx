@@ -1,5 +1,6 @@
 import { ActivityIndicator, useColorScheme } from "react-native";
 
+import { LogoMark } from "@/components/logo-mark";
 import { SectionLabel } from "@/components/section-label";
 import { paletteFor } from "@/theme";
 import { Pressable, Text, View } from "@/tw";
@@ -36,6 +37,7 @@ type DataEmptyProps = {
 export function DataEmpty({ title, bodySlot }: DataEmptyProps) {
   return (
     <View className="flex-1 items-center justify-center gap-2 px-8 py-16">
+      <LogoMark tone="faint" className="mb-1 h-10 w-10" />
       <Text className="text-center font-display text-2xl tracking-wide text-ink">
         {title}
       </Text>
