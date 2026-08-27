@@ -152,8 +152,6 @@ def test_full_pipeline(project, tmdb_factory, capsys):
     titles = {f["title"] for f in data["films"]}
     assert "Nightfall 3" not in titles, "vetoed film must never render"
     assert data["veto"] and data["veto"][0]["title"] == "Nightfall 3"
-    assert (cfg.site_dir / "index.html").exists()
-    assert (cfg.site_dir / "app.js").exists()
     f22 = next(f for f in data["films"] if f["title"] == "Nightfall 22")
     assert len(f22["sc"]) == 3
     assert f22["pv"]["f"] or f22["pv"]["r"]

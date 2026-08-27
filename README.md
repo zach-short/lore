@@ -13,8 +13,8 @@ filtered, justified picks.
 ```bash
 uv sync                       # once: install deps into .venv
 cp .env.example .env          # once: add your TMDB key (themoviedb.org/settings/api)
-uv run lore all         # import → sync → enrich → score → build
-open site/index.html          # the product
+uv run lore all         # import → sync → enrich → score → build → publish
+cd app && bun run web         # the product, at localhost:8081
 ```
 
 `lore all` is idempotent — run it whenever you want fresh data.
@@ -29,7 +29,7 @@ open site/index.html          # the product
 | `lore sync` | Poll each member's public RSS feed (≈50 recent diary entries, arrives with TMDB ids). One polite request per member. |
 | `lore enrich` | Resolve films → TMDB ids (search + `overrides.yaml`), fetch metadata/providers (one cached call per film ever), build the discover candidate pool, write `data/resolution_report.md`. |
 | `lore score` | Fit per-member taste models, score every enriched film per member. `--eval` runs the temporal-holdout evaluation instead. |
-| `lore build` | Emit `site/` (index.html + data.js). Works from `file://`. |
+| `lore build` | Emit `site/data.json` — the payload the app reads (and `lore publish` uploads). |
 
 ## Member onboarding (one-time, ~2 min each)
 
@@ -98,17 +98,29 @@ state first — see SCOPING §8).
 
 ## Deploy
 
-**The app (web)**: `cd app && bun run deploy:web` — static Expo export staged
-by `scripts/prepare-deploy.mjs`, deployed to Vercel (`movienight` project,
-https://movienight-zeta.vercel.app). Redeploy only for code changes; data
-refreshes flow through `lore publish`.
+**The app (web)**: push to `main`. Vercel (`lore` project,
+https://lorenight.vercel.app) builds from the repo-root `vercel.json` —
+`cd app && bun install && bun run vercel-build` → `app/dist`. Redeploy only for
+code changes; data refreshes flow through `lore publish`.
 
-The Vercel project keeps its pre-rename name on purpose: the staging dir name
-in `prepare-deploy.mjs` *is* the project name, so renaming it creates a second
-project on a new URL and strands both the live site and the auth redirect URLs
-pinned in `supabase/config.toml`. Moving to a `lore` URL is a deliberate step —
-rename the project in the Vercel dashboard, then update the staging dir and
-`supabase/config.toml` (`site_url` + `additional_redirect_urls`) together.
+The Git build has no `site/data.json` — the pipeline's output is private and
+gitignored — so `vercel-build` runs `sync-data --optional` and skips it. Web
+then has no same-origin `/data.json` fallback and reads the payload `lore
+publish` put in Supabase. The build also needs `EXPO_PUBLIC_SUPABASE_URL` and
+`EXPO_PUBLIC_SUPABASE_KEY` set on the Vercel project: without them the export
+ships with auth disabled and no way to reach that payload.
 
-**The legacy static site** in `site/` still works from any static host
-(`wrangler pages deploy site/` per SCOPING) but the app is the product now.
+`cd app && bun run deploy:web` is the manual escape hatch — export, stage into
+`.deploy/lore`, upload prebuilt. It pins the deploy to the project *id* through
+`.vercel/project.json`, so the staging dir's name no longer decides which
+project it lands on (it did, before the `movienight` → `lore` rename). Routing
+config has one source of truth, the repo-root `vercel.json`, with the build
+fields stripped on the way into the staging dir.
+
+If the URL ever moves, three things move together — the domain,
+`supabase/config.toml` (`site_url` + `additional_redirect_urls`), and the hosted
+project's Auth URL Configuration — or auth redirects break.
+
+The Jinja-rendered static site this pipeline used to emit alongside
+`data.json` was archived once the app became the product — it lives in
+`~/Projects/archives/lore-legacy-static-site/` if it is ever wanted back.

@@ -13,7 +13,15 @@ const targets = [
   join(appRoot, "src", "lib", "data", "snapshot.json"),
 ];
 
+/* The Vercel Git build has no site/data.json — the pipeline's output is
+   private and gitignored — so --optional downgrades the miss to a warning.
+   Web then has no same-origin /data.json and reads the payload `lore publish`
+   put in Supabase; native still carries whatever snapshot it was built with. */
 if (!existsSync(source)) {
+  if (process.argv.includes("--optional")) {
+    console.warn(`lore: ${source} not found — skipping data sync.`);
+    process.exit(0);
+  }
   console.error(
     `lore: ${source} not found — run the pipeline first (uv run lore all).`,
   );

@@ -56,8 +56,9 @@
     "web": "bun run sync-data && expo start --web",
     "lint": "expo lint",
     "sync-data": "node ./scripts/sync-data.mjs",
-    "export:web": "bun run sync-data && expo export --platform web",
-    "deploy:web": "bun run export:web && node ./scripts/prepare-deploy.mjs && vercel deploy --cwd .deploy/movienight --prod --yes",
+    "export:web": "bun run sync-data && expo export --platform web && node ./scripts/post-export.mjs",
+    "vercel-build": "node ./scripts/sync-data.mjs --optional && expo export --platform web && node ./scripts/post-export.mjs",
+    "deploy:web": "bun run export:web && node ./scripts/prepare-deploy.mjs && vercel deploy --cwd .deploy/lore --prod --yes",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },

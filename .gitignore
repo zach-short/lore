@@ -1,5 +1,6 @@
 # secrets
 .env
+.claude
 
 # private data: friends' exports, the database, generated reports
 # (leading slash: unanchored `data/` also swallowed app/src/lib/data/)

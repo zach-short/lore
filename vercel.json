@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "echo 'deps are installed by buildCommand in app/'",
+  "buildCommand": "cd app && bun install --frozen-lockfile && bun run vercel-build",
+  "outputDirectory": "app/dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [{ "source": "/film/:id", "destination": "/film/detail" }]
+}

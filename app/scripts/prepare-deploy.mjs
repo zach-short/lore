@@ -1,23 +1,20 @@
-/* Stages dist/ into .deploy/movienight for a prebuilt Vercel deploy:
-   - the staging dir's *name* becomes the Vercel project name on first deploy,
-     so it stays "movienight" even after the Lore rename: renaming it would
-     spin up a second Vercel project on a new URL, orphaning the live site at
-     movienight-zeta.vercel.app and the auth redirect URLs in supabase/config.toml
-   - film/[id].html is copied to film/detail.html because bracket paths are
-     unreliable as rewrite destinations; vercel.json points /film/:id there
+/* Stages dist/ into .deploy/lore for a prebuilt Vercel deploy — the manual
+   escape hatch next to the Vercel Git build, which runs `vercel-build` from
+   the repo-root vercel.json instead. Routing config has one source of truth
+   (that same vercel.json); the build fields are stripped on the way in,
+   because the staging dir is already built and must not be rebuilt.
    Run via `bun run deploy:web` (export → stage → vercel deploy --prod). */
-import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const appRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const dist = join(appRoot, "dist");
-const stage = join(appRoot, ".deploy", "movienight");
+const stage = join(appRoot, ".deploy", "lore");
 
 rmSync(stage, { recursive: true, force: true });
 mkdirSync(stage, { recursive: true });
 cpSync(dist, stage, { recursive: true });
-cpSync(join(stage, "film", "[id].html"), join(stage, "film", "detail.html"));
 
 /* Expo exports font assets under assets/node_modules/…, which Vercel's
    default ignore list would silently drop — un-ignore them explicitly. */
@@ -26,14 +23,25 @@ writeFileSync(
   "!assets/node_modules\n!assets/node_modules/**\n",
 );
 
+const { installCommand, buildCommand, outputDirectory, ...routing } = JSON.parse(
+  readFileSync(join(appRoot, "..", "vercel.json"), "utf8"),
+);
 writeFileSync(
   join(stage, "vercel.json"),
+  JSON.stringify(routing, null, 2) + "\n",
+);
+
+/* Pin the deploy to the existing project by id (ids survive a project rename,
+   the dir name does not — without this, `--yes` would read the staging dir's
+   name as a project name and create a second project). Not secrets: the same
+   values the Vercel CLI writes when it links a directory. */
+mkdirSync(join(stage, ".vercel"), { recursive: true });
+writeFileSync(
+  join(stage, ".vercel", "project.json"),
   JSON.stringify(
     {
-      cleanUrls: true,
-      trailingSlash: false,
-      /* destination is the cleanUrls path — .html there 308s and breaks the rewrite */
-      rewrites: [{ source: "/film/:id", destination: "/film/detail" }],
+      projectId: "prj_fr2HUgeadfK4aS4sLDSp8rhTyTtb",
+      orgId: "team_si9uvTEwRwmnkCLygC9wtC5Y",
     },
     null,
     2,

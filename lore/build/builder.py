@@ -1,21 +1,16 @@
-"""Emit the static site (SCOPING §8 step 6): site/index.html + data.js
-(+ data.json for tooling). Data is shipped as a JS global rather than fetched,
-so the page works from file:// as well as from Cloudflare Pages."""
+"""Emit the app's data payload (SCOPING §8 step 6): site/data.json — the
+precomputed per-member × per-film scores that `lore publish` uploads and the
+app reads. The Jinja-rendered static page this step used to emit alongside it
+was archived when the Expo app became the product."""
 
 from __future__ import annotations
 
 import json
-import shutil
 import sqlite3
-from pathlib import Path
-
-from jinja2 import Environment, FileSystemLoader
 
 from .. import db
 from ..config import Config
 from ..model.score import MODEL_VERSION
-
-TEMPLATES = Path(__file__).parent / "templates"
 
 
 def _payload(conn: sqlite3.Connection, cfg: Config) -> dict:
@@ -147,26 +142,13 @@ def run(conn: sqlite3.Connection, cfg: Config) -> None:
 
     data = json.dumps(payload, separators=(",", ":"), ensure_ascii=False)
     (site / "data.json").write_text(data, encoding="utf-8")
-    (site / "data.js").write_text(
-        "window.__LORE__ = " + data + ";", encoding="utf-8"
-    )
-    env = Environment(loader=FileSystemLoader(TEMPLATES), autoescape=True)
-    html = env.get_template("index.html.j2").render(
-        generated_at=payload["generated_at"],
-        n_films=len(payload["films"]),
-        n_members=len(payload["members"]),
-        region=cfg.region,
-    )
-    (site / "index.html").write_text(html, encoding="utf-8")
-    for asset in ("app.js", "style.css"):
-        shutil.copyfile(TEMPLATES / asset, site / asset)
-    size_kb = (site / "data.js").stat().st_size // 1024
+    size_kb = (site / "data.json").stat().st_size // 1024
     print(
-        f"build: site/ written — {len(payload['films'])} films, "
-        f"{len(payload['members'])} members, data.js {size_kb} KB"
+        f"build: site/data.json written — {len(payload['films'])} films, "
+        f"{len(payload['members'])} members, {size_kb} KB"
     )
     if not payload["films"]:
         print(
-            "build: (no scored films yet — the page will show its empty state. "
+            "build: (no scored films yet — the app will show its empty state. "
             "Run enrich + score once a TMDB key is configured.)"
         )

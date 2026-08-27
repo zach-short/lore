@@ -1,6 +1,6 @@
--- movienight: auth profiles + Letterboxd export uploads (app onboarding).
+-- lore: auth profiles + Letterboxd export uploads (app onboarding).
 -- The app writes here; the pipeline reads with the service role key
--- (`movienight pull`), so no client-side update/delete policies exist.
+-- (`lore pull`), so no client-side update/delete policies exist.
 
 -- One row per auth user, created during onboarding.
 create table public.profiles (

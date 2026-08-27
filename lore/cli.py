@@ -2,7 +2,7 @@
 pull | import | sync | enrich | score | build | publish | all.
 
 Run from the project root (where config.toml lives). Phase 1 is on-demand:
-`lore all` chains everything and site/index.html is the product."""
+`lore all` chains everything and the Expo app in app/ is the product."""
 
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ def main(argv: list[str] | None = None) -> None:
         "--eval", action="store_true", dest="run_eval",
         help="run the temporal-holdout evaluation instead of writing scores",
     )
-    sub.add_parser("build", help="emit site/index.html + data.js")
+    sub.add_parser("build", help="emit site/data.json, the app's payload")
     sub.add_parser(
         "publish", help="upload site/data.json to Supabase for the app"
     )

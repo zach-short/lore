@@ -1,4 +1,4 @@
--- movienight: friend graph + pipeline-published data payload.
+-- lore: friend graph + pipeline-published data payload.
 -- Friends power the app's crew picker (who's in the room tonight); the
 -- site-data bucket lets the pipeline publish data.json so the app reads
 -- fresh scores at runtime instead of a payload baked in at deploy.
