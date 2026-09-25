@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+# name:one-line description — single source of truth for both the menu and completion
+COMMANDS=(
+  "dev:Run the app (Expo web) at localhost:8081"
+  "build:Export the app for web (bun run export:web)"
+  "test:Run the app's vitest suite"
+  "typecheck:Typecheck the app"
+  "lint:Lint the app (expo lint)"
+  "pipeline:Run the full data pipeline (import, sync, enrich, score, build, publish)"
+  "deploy:The manual deploy escape hatch — export, stage, upload prebuilt to Vercel"
+  "gates:Run every gate, app and pipeline, in one pass"
+  "shell:Print the ~/.zshrc snippet for the lore function + completion"
+  "help:List commands"
+)
+
+cmd_dev() {
+  (cd "$ROOT/app" && bun run web)
+}
+
+cmd_build() {
+  (cd "$ROOT/app" && bun run export:web)
+}
+
+cmd_test() {
+  (cd "$ROOT/app" && bun run test)
+}
+
+cmd_typecheck() {
+  (cd "$ROOT/app" && bun run typecheck)
+}
+
+cmd_lint() {
+  (cd "$ROOT/app" && bun run lint)
+}
+
+cmd_pipeline() {
+  # `lore all` is idempotent — import, sync, enrich, score, build, publish (README Quickstart).
+  # The LaunchAgent already runs this daily at 6:30am; this is for running it by hand.
+  uv run lore all
+}
+
+cmd_deploy() {
+  # The app (web) normally ships by pushing main — the Vercel project builds from the
+  # repo-root vercel.json. This is the manual escape hatch documented in README's Deploy
+  # section: export, stage into .deploy/lore, upload prebuilt, pinned to the project id
+  # through app/.vercel/project.json so it can't land on the wrong Vercel project.
+  (cd "$ROOT/app" && bun run deploy:web)
+}
+
+cmd_gates() {
+  cmd_build
+  cmd_typecheck
+  cmd_lint
+  cmd_test
+  # The pipeline package has its own pytest suite (pyproject.toml testpaths = ["tests"]).
+  uv run pytest
+}
+
+cmd_help() {
+  echo "usage: lore <command>"
+  echo
+  for entry in "${COMMANDS[@]}"; do
+    printf "  %-10s %s\n" "${entry%%:*}" "${entry#*:}"
+  done
+}
+
+cmd_shell() {
+  cat <<'EOF'
+lore() { "$HOME/Projects/lore/scripts/lore" "$@"; }
+
+_lore_complete() {
+  local -a subcmds
+  subcmds=("${(@f)$(lore --complete)}")
+  _describe 'command' subcmds
+}
+compdef _lore_complete lore
+EOF
+}
+
+cmd___complete() {
+  for entry in "${COMMANDS[@]}"; do
+    echo "$entry"
+  done
+}
+
+# Same table drives an fzf picker on bare invocation — only when it'd actually be
+# interactive, so a cron job or `lore pipeline | something` never gets asked anything.
+interactive_pick() {
+  local lines
+  lines="$(for entry in "${COMMANDS[@]}"; do
+    printf "%-10s %s\n" "${entry%%:*}" "${entry#*:}"
+  done)"
+  echo "$lines" | fzf --prompt='lore> ' --height='~70%' --reverse --no-info \
+    --header='select a command' | awk '{print $1}'
+}
+
+if [[ $# -eq 0 && -t 0 && -t 1 ]] && command -v fzf >/dev/null 2>&1; then
+  picked="$(interactive_pick || true)"
+  [[ -n "$picked" ]] || exit 0
+  set -- "$picked"
+fi
+
+case "${1:-help}" in
+  dev) cmd_dev ;;
+  build) cmd_build ;;
+  test) cmd_test ;;
+  typecheck) cmd_typecheck ;;
+  lint) cmd_lint ;;
+  pipeline) cmd_pipeline ;;
+  deploy) cmd_deploy ;;
+  gates) cmd_gates ;;
+  shell) cmd_shell ;;
+  --complete) cmd___complete ;;
+  help|*) cmd_help ;;
+esac
